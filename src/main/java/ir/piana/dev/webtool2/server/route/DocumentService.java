@@ -3,12 +3,7 @@ package ir.piana.dev.webtool2.server.route;
 import ir.piana.dev.webtool2.server.annotation.*;
 import ir.piana.dev.webtool2.server.asset.PianaAsset;
 import ir.piana.dev.webtool2.server.asset.PianaAssetResolver;
-import ir.piana.dev.webtool2.server.document.DocumentResolver;
-import ir.piana.dev.webtool2.server.document.ServicesModel;
-import ir.piana.dev.webtool2.server.response.PianaResponse;
-import ir.piana.dev.webtool2.server.session.Session;
-import ir.piana.dev.webtool2.server.asset.PianaAsset;
-import ir.piana.dev.webtool2.server.document.DocumentResolver;
+import ir.piana.dev.webtool2.server.document.*;
 import ir.piana.dev.webtool2.server.response.PianaResponse;
 import ir.piana.dev.webtool2.server.session.Session;
 
@@ -16,7 +11,6 @@ import javax.ws.rs.HttpMethod;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.lang.invoke.MethodType;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -55,12 +49,40 @@ class DocumentService extends RouteService {
     public static PianaResponse getPianaJson(
             Session session,
             @MapParam Map<String, List<String>> map) {
-        List<ServicesModel> servicesModels = new ArrayList<>();
-        servicesModels.add(new ServicesModel("hello-world", "id1", false, MediaType.APPLICATION_JSON, null,
-                new ArrayList<String>(Arrays.asList("name")), HttpMethod.GET));
+        List<ServiceModel> serviceModels = new ArrayList<>();
+        ServiceModel serviceModel = new ServiceModel("hello-world", "id1",
+                false, MediaType.APPLICATION_JSON,
+                new ArrayList<String>(Arrays.asList("family")),
+                new ArrayList<String>(Arrays.asList("name")), HttpMethod.GET);
+        PathModel pathModel = new PathModel();
+        pathModel.paths.add(new PathSegmentModel("hello-world", PathSegmentType.TEXT));
+        pathModel.paths.add(new PathSegmentModel("family", PathSegmentType.PARAM));
+        serviceModel.setPathModel(pathModel);
+        serviceModels.add(serviceModel);
         return new PianaResponse(
                 Response.Status.OK, 0,
-                servicesModels,
+                serviceModels,
+                MediaType.APPLICATION_JSON);
+    }
+
+    @MethodHandler
+    @Path("service-models")
+    public static PianaResponse getPianaServiceModels(
+            Session session,
+            @MapParam Map<String, List<String>> map) {
+        List<ServiceModel> serviceModels = new ArrayList<>();
+        ServiceModel serviceModel = new ServiceModel(pianaServer.httpBaseUrl(), "id1",
+                false, MediaType.APPLICATION_JSON,
+                new ArrayList<String>(Arrays.asList("family")),
+                new ArrayList<String>(Arrays.asList("name")), HttpMethod.GET);
+        PathModel pathModel = new PathModel();
+        pathModel.paths.add(new PathSegmentModel("hello-world", PathSegmentType.TEXT));
+        pathModel.paths.add(new PathSegmentModel("family", PathSegmentType.PARAM));
+        serviceModel.setPathModel(pathModel);
+        serviceModels.add(serviceModel);
+        return new PianaResponse(
+                Response.Status.OK, 1,
+                serviceModels,
                 MediaType.APPLICATION_JSON);
     }
 

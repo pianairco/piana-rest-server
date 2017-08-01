@@ -85,7 +85,7 @@ public class RouteClassGenerator {
                 if (!directory.exists()) {
                     /**
                      * If you require it to make the
-                     * entire directory path including parents
+                     * entire directory paths including parents
                      * use of directory.mkdirs();
                      * else, use of directory.mkdir();*/
                     directory.mkdirs();
@@ -93,7 +93,7 @@ public class RouteClassGenerator {
                 if(outputClassPath == null ||
                         outputClassPath.isEmpty())
                     throw new Exception(
-                            "output class path is null");
+                            "output class paths is null");
                 File f = new File(outputClassPath.concat("/")
                         .concat(className)
                         .concat(".java"));
@@ -102,7 +102,7 @@ public class RouteClassGenerator {
                 fos.close();
             } catch (Exception e) {
                 logger.error("not can make class file " +
-                        "in determined path");
+                        "in determined paths");
             }
         }
     }

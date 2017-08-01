@@ -18,12 +18,12 @@ import java.util.Map;
  */
 @Handler(baseUrl = "hello-world", handlerType = HandlerType.METHOD_HANDLER)
 public class OneMethodHandler {
-
     @MethodHandler(requiredRole = RoleType.GUEST, sync = false)
+    @Path("{family}")
     public static PianaResponse getHello(
             Session session,
             @MapParam Map<String, List<String>> map,
-            @QueryParam("name") String name) {
-        return new PianaResponse(Response.Status.OK, 1, name);
+            @QueryParam("name") String name, @PathParam("family") StringBuilder family) {
+        return new PianaResponse(Response.Status.OK, 1, name + " " + family);
     }
 }

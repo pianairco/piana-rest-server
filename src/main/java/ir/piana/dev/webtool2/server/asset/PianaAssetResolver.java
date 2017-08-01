@@ -65,7 +65,7 @@ public class PianaAssetResolver implements Runnable {
             if(Files.exists(path)) {
                 return new PianaAssetResolver(path);
             } else {
-                throw new Exception("this path not exist");
+                throw new Exception("this paths not exist");
             }
         } catch (InterruptedException e) {
             e.printStackTrace();

@@ -13,7 +13,7 @@ import java.nio.charset.Charset;
  * @author Mohammad Rahmati, 5/10/2017 8:46 PM
  */
 class AssetService {
-    //called if path is null or empty
+    //called if paths is null or empty
     public static PianaResponse getAsset(
             Session session,
             PianaAssetResolver assetResolver) {

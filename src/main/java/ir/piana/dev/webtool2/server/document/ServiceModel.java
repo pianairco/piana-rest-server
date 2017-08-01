@@ -5,20 +5,29 @@ import java.util.List;
 /**
  * Created by SYSTEM on 7/19/2017.
  */
-public class ServicesModel {
-    private String resourcePath;
+public class ServiceModel {
+    private String resourceBaseUrl;
     private String idName;
     private Boolean asset;
     private String returnType;
     private List<String> pathParams;
     private List<String> queryParams;
     private String methodType;
+    private PathModel pathModel;
 
-    public ServicesModel() {
+    public PathModel getPathModel() {
+        return pathModel;
     }
 
-    public ServicesModel(String resourcePath, String idName, Boolean asset, String returnType, List<String> pathParams, List<String> queryParams, String methodType) {
-        this.resourcePath = resourcePath;
+    public void setPathModel(PathModel pathModel) {
+        this.pathModel = pathModel;
+    }
+
+    public ServiceModel() {
+    }
+
+    public ServiceModel(String resourceBaseUrl, String idName, Boolean asset, String returnType, List<String> pathParams, List<String> queryParams, String methodType) {
+        this.resourceBaseUrl = resourceBaseUrl;
         this.idName = idName;
         this.asset = asset;
         this.returnType = returnType;
@@ -27,12 +36,12 @@ public class ServicesModel {
         this.methodType = methodType;
     }
 
-    public String getResourcePath() {
-        return resourcePath;
+    public String getResourceBaseUrl() {
+        return resourceBaseUrl;
     }
 
-    public void setResourcePath(String resourcePath) {
-        this.resourcePath = resourcePath;
+    public void setResourceBaseUrl(String resourceBaseUrl) {
+        this.resourceBaseUrl = resourceBaseUrl;
     }
 
     public String getReturnType() {

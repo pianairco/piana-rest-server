@@ -1,23 +1,17 @@
 package ir.piana.dev.webtool2.server.document;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import ir.piana.dev.webtool2.server.annotation.PianaServer;
 import ir.piana.dev.webtool2.server.asset.PianaAsset;
 import ir.piana.dev.webtool2.server.asset.PianaAssetResolver;
-import ir.piana.dev.webtool2.server.asset.PianaAsset;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 
 import javax.ws.rs.core.MediaType;
 import java.io.BufferedReader;
-import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Created by SYSTEM on 7/17/2017.
@@ -63,7 +57,7 @@ public abstract class DocumentResolver {
     public static PianaAsset getPianaDocumentJsonModel(
             PianaServer pianaServer)
             throws Exception {
-        List<ServicesModel> servicesModels = new ArrayList<>();
+        List<ServiceModel> serviceModels = new ArrayList<>();
                 return new PianaAsset(null, null, null,
                 MediaType.APPLICATION_JSON);
     }

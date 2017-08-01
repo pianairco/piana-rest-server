@@ -1,8 +1,6 @@
 package ir.piana.dev.webtool2.server.http;
 
 import ir.piana.dev.webtool2.server.annotation.PianaServer;
-import ir.piana.dev.webtool2.server.annotation.PianaServerCORS;
-import ir.piana.dev.webtool2.server.annotation.PianaServerSession;
 import ir.piana.dev.webtool2.server.filter.response.CORSFilter;
 import ir.piana.dev.webtool2.server.route.RouteClassGenerator;
 import ir.piana.dev.webtool2.server.session.SessionManager;
@@ -10,7 +8,6 @@ import org.apache.log4j.Logger;
 import org.glassfish.jersey.server.ResourceConfig;
 
 import javax.ws.rs.core.UriBuilder;
-import java.io.InputStream;
 import java.net.URI;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -114,7 +111,7 @@ public abstract class BaseHttpServer {
                 .concat(":")
                 .concat(String.valueOf(pianaServer.httpPort()))
                 .concat("/")
-                .concat(pianaServer.httpBaseRoute()))
+                .concat(pianaServer.httpBaseUrl()))
                 .build();
     }
 }
