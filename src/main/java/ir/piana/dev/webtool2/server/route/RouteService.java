@@ -9,9 +9,6 @@ import ir.piana.dev.webtool2.server.session.SessionManager;
 import org.apache.log4j.Logger;
 
 import javax.annotation.PostConstruct;
-import javax.ws.rs.GET;
-import javax.ws.rs.HttpMethod;
-import javax.ws.rs.Path;
 import javax.ws.rs.core.*;
 import javax.ws.rs.core.Response.ResponseBuilder;
 import javax.ws.rs.core.Response.Status;

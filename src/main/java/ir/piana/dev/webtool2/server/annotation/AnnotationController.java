@@ -4,6 +4,7 @@ import org.reflections.Reflections;
 
 import javax.ws.rs.HttpMethod;
 import javax.ws.rs.Path;
+import javax.ws.rs.QueryParam;
 import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
@@ -70,6 +71,51 @@ public abstract class AnnotationController {
                     throw new Exception("only one param can be exposed by BodyObjectParam.");
         }
         return targetParam;
+    }
+
+    public static List<Parameter> getParameterAnnotatedByQueryParam(
+            Method targetMethod) {
+        Parameter[] parameters = targetMethod.getParameters();
+        List<Parameter> targetParamList = new ArrayList<Parameter>();
+        for (Parameter parameter : parameters)
+            if(parameter.getAnnotation(QueryParam.class) != null)
+                targetParamList.add(parameter);
+
+        return targetParamList;
+    }
+
+    public static Path getPathAnnotation(
+            Method targetMethod) {
+        Path annotation = targetMethod.getAnnotation(Path.class);
+        if(annotation == null) {
+            return new Path() {
+                @Override
+                public boolean equals(Object obj) {
+                    return false;
+                }
+
+                @Override
+                public int hashCode() {
+                    return 0;
+                }
+
+                @Override
+                public String toString() {
+                    return "";
+                }
+
+                @Override
+                public Class<? extends Annotation> annotationType() {
+                    return null;
+                }
+
+                @Override
+                public String value() {
+                    return "";
+                }
+            };
+        }
+        return annotation;
     }
 
     public static List<Class> getHandlerClasses() {

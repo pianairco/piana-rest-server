@@ -9,6 +9,6 @@ import ir.piana.dev.webtool2.server.role.RoleType;
  * Created by SYSTEM on 7/29/2017.
  */
 @Handler(baseUrl = "", handlerType = HandlerType.ASSET_HANDLER)
-@AssetHandler(assetPath = "./html-root", sync = false, requiredRole = RoleType.GUEST)
+@AssetHandler(assetPath = "./src/main/resources", sync = false, requiredRole = RoleType.GUEST)
 public class OneAssetHandler {
 }

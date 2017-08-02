@@ -6,11 +6,10 @@ import java.util.List;
  * Created by SYSTEM on 7/19/2017.
  */
 public class ServiceModel {
-    private String resourceBaseUrl;
-    private String idName;
+//    private String resourceBaseUrl;
     private Boolean asset;
     private String returnType;
-    private List<String> pathParams;
+//    private List<String> pathParams;
     private List<String> queryParams;
     private String methodType;
     private PathModel pathModel;
@@ -26,23 +25,32 @@ public class ServiceModel {
     public ServiceModel() {
     }
 
-    public ServiceModel(String resourceBaseUrl, String idName, Boolean asset, String returnType, List<String> pathParams, List<String> queryParams, String methodType) {
-        this.resourceBaseUrl = resourceBaseUrl;
-        this.idName = idName;
+    public ServiceModel(
+            Boolean asset, String returnType,
+            List<String> queryParams,
+            String methodType) {
         this.asset = asset;
         this.returnType = returnType;
-        this.pathParams = pathParams;
         this.queryParams = queryParams;
         this.methodType = methodType;
     }
 
-    public String getResourceBaseUrl() {
-        return resourceBaseUrl;
-    }
+//    public ServiceModel(String resourceBaseUrl, Boolean asset, String returnType, List<String> pathParams, List<String> queryParams, String methodType) {
+//        this.resourceBaseUrl = resourceBaseUrl;
+//        this.asset = asset;
+//        this.returnType = returnType;
+//        this.pathParams = pathParams;
+//        this.queryParams = queryParams;
+//        this.methodType = methodType;
+//    }
 
-    public void setResourceBaseUrl(String resourceBaseUrl) {
-        this.resourceBaseUrl = resourceBaseUrl;
-    }
+//    public String getResourceBaseUrl() {
+//        return resourceBaseUrl;
+//    }
+//
+//    public void setResourceBaseUrl(String resourceBaseUrl) {
+//        this.resourceBaseUrl = resourceBaseUrl;
+//    }
 
     public String getReturnType() {
         return returnType;
@@ -52,13 +60,13 @@ public class ServiceModel {
         this.returnType = returnType;
     }
 
-    public List<String> getPathParams() {
-        return pathParams;
-    }
+//    public List<String> getPathParams() {
+//        return pathParams;
+//    }
 
-    public void setPathParams(List<String> pathParams) {
-        this.pathParams = pathParams;
-    }
+//    public void setPathParams(List<String> pathParams) {
+//        this.pathParams = pathParams;
+//    }
 
     public List<String> getQueryParams() {
         return queryParams;
@@ -74,14 +82,6 @@ public class ServiceModel {
 
     public void setMethodType(String methodType) {
         this.methodType = methodType;
-    }
-
-    public String getIdName() {
-        return idName;
-    }
-
-    public void setIdName(String idName) {
-        this.idName = idName;
     }
 
     public Boolean getAsset() {
