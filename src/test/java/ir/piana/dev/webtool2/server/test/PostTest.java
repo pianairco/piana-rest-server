@@ -23,7 +23,7 @@ public class PostTest {
         client = ClientBuilder.newClient();
     }
 
-    @Test
+//    @Test
     public void testPostRequest() {
         WebTarget target = client.target(BASE_URI);
         UserModel userModel = new UserModel("ali", "rahmati");

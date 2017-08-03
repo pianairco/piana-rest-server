@@ -409,36 +409,6 @@ public abstract class HandlerMethodCreator {
         }
 
         @Override
-        protected String makeMethodSignature()
-                throws Exception {
-            StringBuilder sb = new StringBuilder();
-            Parameter[] parameters = method.getParameters();
-            for (int i = 1; i < parameters.length; i++) {
-                PathParam pathParam = parameters[i].getAnnotation(PathParam.class);
-                QueryParam queryParam = parameters[i].getAnnotation(QueryParam.class);
-                BodyObjectParam bodyObjectParam = parameters[i]
-                        .getAnnotation(BodyObjectParam.class);
-                MapParam mapParam = parameters[i].getAnnotation(MapParam.class);
-                if(pathParam != null)
-                    sb.append("@PathParam(\"".concat(pathParam.value())
-                            .concat("\")").concat(parameters[i].toString()).concat(","));
-                else if(queryParam != null)
-                    sb.append("@QueryParam(\"".concat(queryParam.value())
-                            .concat("\")").concat(parameters[i].toString()).concat(","));
-                else if(bodyObjectParam != null)
-                    sb.append(parameters[i].toString().concat(","));
-                else if(mapParam != null)
-                    sb.append("@Context UriInfo uriInfo,");
-                else
-                    throw new Exception("this parameter should not be allowed present in this location.");
-            }
-
-            sb.deleteCharAt(sb.length() - 1);
-            sb.append(") throws Exception {\n");
-            return sb.toString();
-        }
-
-        @Override
         protected String makeForbiddenChecker() {
             StringBuilder sb = new StringBuilder();
             sb.append(forbiddenCheckable.checkForbidden(methodHandler.requiredRole()));
@@ -460,7 +430,28 @@ public abstract class HandlerMethodCreator {
             StringBuilder sb = new StringBuilder();
             sb.append("public Response ".concat(method.getName())
                     .concat("(@Context HttpHeaders httpHeaders,"));
-            sb.append(super.makeMethodSignature());
+            Parameter[] parameters = method.getParameters();
+            for (int i = 1; i < parameters.length; i++) {
+                PathParam pathParam = parameters[i].getAnnotation(PathParam.class);
+                QueryParam queryParam = parameters[i].getAnnotation(QueryParam.class);
+                BodyObjectParam bodyObjectParam = parameters[i]
+                        .getAnnotation(BodyObjectParam.class);
+                MapParam mapParam = parameters[i].getAnnotation(MapParam.class);
+                if(pathParam != null)
+                    sb.append("@PathParam(\"".concat(pathParam.value())
+                            .concat("\")").concat(parameters[i].toString()).concat(","));
+                else if(queryParam != null)
+                    sb.append("@QueryParam(\"".concat(queryParam.value())
+                            .concat("\")").concat(parameters[i].toString()).concat(","));
+                else if(bodyObjectParam != null)
+                    sb.append(parameters[i].toString().concat(","));
+                else if(mapParam != null)
+                    sb.append("@Context UriInfo uriInfo,");
+                else
+                    throw new Exception("this parameter should not be allowed present in this location.");
+            }
+            sb.deleteCharAt(sb.length() - 1);
+            sb.append(") throws Exception {\n");
             return sb.toString();
         }
 
@@ -534,7 +525,30 @@ public abstract class HandlerMethodCreator {
             sb.append("public void ".concat(method.getName())
                     .concat("(@Suspended final AsyncResponse asyncResponse,")
                     .concat("@Context HttpHeaders httpHeaders,"));
-            sb.append(super.makeMethodSignature());
+
+            Parameter[] parameters = method.getParameters();
+            for (int i = 1; i < parameters.length; i++) {
+                PathParam pathParam = parameters[i].getAnnotation(PathParam.class);
+                QueryParam queryParam = parameters[i].getAnnotation(QueryParam.class);
+                BodyObjectParam bodyObjectParam = parameters[i]
+                        .getAnnotation(BodyObjectParam.class);
+                MapParam mapParam = parameters[i].getAnnotation(MapParam.class);
+                if(pathParam != null)
+                    sb.append("@PathParam(\"".concat(pathParam.value())
+                            .concat("\")").concat(parameters[i].toString()).concat(","));
+                else if(queryParam != null)
+                    sb.append("@QueryParam(\"".concat(queryParam.value())
+                            .concat("\")").concat(parameters[i].toString()).concat(","));
+                else if(bodyObjectParam != null)
+                    sb.append(parameters[i].toString().concat(","));
+                else if(mapParam != null)
+                    sb.append("@Context UriInfo uriInfo,");
+                else
+                    throw new Exception("this parameter should not be allowed present in this location.");
+            }
+
+            sb.deleteCharAt(sb.length() - 1);
+            sb.append(") throws Exception {\n");
             return sb.toString();
         }
 
