@@ -28,6 +28,9 @@ class DocumentService extends RouteService {
     @PianaServerProvider
     public static PianaServer pianaServer;
 
+    @PianaSpaceProvider(Key = "db_url")
+    public static String dbUrl;
+
     @MethodHandler
     public static PianaResponse getPianaDocument(
             Session session,

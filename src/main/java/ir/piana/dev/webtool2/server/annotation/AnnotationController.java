@@ -7,6 +7,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.QueryParam;
 import java.io.IOException;
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.util.ArrayList;
@@ -37,6 +38,16 @@ public abstract class AnnotationController {
         Annotation annotation = targetClass
                 .getAnnotation(PianaServer.class);
         return annotation == null ? null : (PianaServer) annotation;
+    }
+
+    public static List<PianaSpaceProperty> getPianaSpaceProperties(
+            Class targetClass) {
+        Annotation[] annotationsByType = targetClass
+                .getAnnotationsByType(PianaSpaceProperty.class);
+        List<PianaSpaceProperty> spaceProperties = new ArrayList<>();
+        for(Annotation annotation : annotationsByType)
+            spaceProperties.add((PianaSpaceProperty)annotation);
+        return spaceProperties;
     }
 
     public static Parameter getParameterAnnotatedByMapParam(
@@ -163,6 +174,22 @@ public abstract class AnnotationController {
         Annotation annotation = targetMethod
                 .getAnnotation(MethodHandler.class);
         return annotation == null ? null : (MethodHandler) annotation;
+    }
+
+    public static List<Field> getFieldsAnnotatedByPianaSpaceProvider(
+            Class targetClass){
+        Field[] fields = targetClass.getFields();
+        List<Field> fieldList = new ArrayList<>();
+        for (Field field : fields)
+            if(field.getAnnotation(PianaSpaceProvider.class) != null)
+                fieldList.add(field);
+        return fieldList;
+    }
+
+    public static PianaSpaceProvider getPianaSpaceProviderAnnotation(
+            Field field) {
+                return (PianaSpaceProvider) field
+                        .getAnnotation(PianaSpaceProvider.class);
     }
 
     public static void main(String[] args) {

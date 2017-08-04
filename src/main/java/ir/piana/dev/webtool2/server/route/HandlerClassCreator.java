@@ -4,8 +4,11 @@ import ir.piana.dev.secure.random.SecureRandomMaker;
 import ir.piana.dev.secure.random.SecureRandomType;
 import ir.piana.dev.secure.util.HexConverter;
 import ir.piana.dev.webtool2.server.annotation.*;
+import ir.piana.dev.webtool2.server.space.PianaSpace;
 import org.apache.log4j.Logger;
 
+import javax.print.attribute.standard.NumberUp;
+import java.io.FileReader;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.List;
@@ -47,10 +50,16 @@ public abstract class HandlerClassCreator {
     }
 
     private final void doDependencyInjection()
-            throws IllegalAccessException {
+            throws Exception {
         for(Field field : targetClass.getFields()){
             if(field.getAnnotation(PianaServerProvider.class) != null)
                 field.set(null, pianaServer);
+            else if (field.getAnnotation(PianaSpaceProvider.class) != null) {
+                PianaSpaceProvider annotation = field
+                        .getAnnotation(PianaSpaceProvider.class);
+                String property = PianaSpace.getProperty(annotation.Key());
+                field.set(null, property);
+            }
         }
     }
 
