@@ -1,10 +1,7 @@
 package ir.piana.dev.webtool2.server.handler;
 
-import ir.piana.dev.webtool2.server.annotation.MapParam;
+import ir.piana.dev.webtool2.server.annotation.*;
 import ir.piana.dev.webtool2.server.response.PianaResponse;
-import ir.piana.dev.webtool2.server.annotation.Handler;
-import ir.piana.dev.webtool2.server.annotation.HandlerType;
-import ir.piana.dev.webtool2.server.annotation.MethodHandler;
 import ir.piana.dev.webtool2.server.role.RoleType;
 import ir.piana.dev.webtool2.server.session.Session;
 
@@ -18,12 +15,15 @@ import java.util.Map;
  */
 @Handler(baseUrl = "hello-world", handlerType = HandlerType.METHOD_HANDLER)
 public class OneMethodHandler {
+    @PianaSpaceProvider(Key = "msg")
+    public static String msg;
+
     @MethodHandler(requiredRole = RoleType.GUEST, sync = false)
     @Path("{family}")
     public static PianaResponse getHello(
             Session session,
             @MapParam Map<String, List<String>> map,
             @QueryParam("name") String name, @PathParam("family") StringBuilder family) {
-        return new PianaResponse(Response.Status.OK, 1, name + " " + family);
+        return new PianaResponse(Response.Status.OK, 1, msg + " " + name + " " + family);
     }
 }

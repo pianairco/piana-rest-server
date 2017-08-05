@@ -41,12 +41,24 @@ public abstract class AnnotationController {
     }
 
     public static List<PianaSpaceProperty> getPianaSpaceProperties(
-            Class targetClass) {
-        Annotation[] annotationsByType = targetClass
-                .getAnnotationsByType(PianaSpaceProperty.class);
+            Class targetClass)
+            throws Exception {
+        Annotation[] propertyAnnotation = targetClass.getAnnotationsByType(PianaSpaceProperty.class);
+        Annotation[] propertiesAnnotation = targetClass
+                .getAnnotationsByType(PianaSpaceProperties.class);
+
+        if((propertiesAnnotation != null && propertiesAnnotation.length > 0) &&
+                (propertyAnnotation != null && propertyAnnotation.length > 0))
+            throw new Exception("PianaSpaceProperty and  PianaSpaceProperties can not appears in the same type");
+
         List<PianaSpaceProperty> spaceProperties = new ArrayList<>();
-        for(Annotation annotation : annotationsByType)
-            spaceProperties.add((PianaSpaceProperty)annotation);
+        if (propertyAnnotation != null && propertyAnnotation.length > 0)
+            spaceProperties.add((PianaSpaceProperty) propertyAnnotation[0]);
+        else {
+            for (PianaSpaceProperty spaceProperty :
+                    ((PianaSpaceProperties)propertiesAnnotation[0]).properties())
+                spaceProperties.add(spaceProperty);
+        }
         return spaceProperties;
     }
 
