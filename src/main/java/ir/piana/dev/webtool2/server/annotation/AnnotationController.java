@@ -54,7 +54,7 @@ public abstract class AnnotationController {
         List<PianaSpaceProperty> spaceProperties = new ArrayList<>();
         if (propertyAnnotation != null && propertyAnnotation.length > 0)
             spaceProperties.add((PianaSpaceProperty) propertyAnnotation[0]);
-        else {
+        else if (propertiesAnnotation != null && propertiesAnnotation.length > 0) {
             for (PianaSpaceProperty spaceProperty :
                     ((PianaSpaceProperties)propertiesAnnotation[0]).properties())
                 spaceProperties.add(spaceProperty);
