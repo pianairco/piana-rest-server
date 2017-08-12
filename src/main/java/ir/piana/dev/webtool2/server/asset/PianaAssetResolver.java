@@ -32,29 +32,28 @@ public class PianaAssetResolver implements Runnable {
 
     private PianaAssetResolver(Path rootPath)
             throws IOException, InterruptedException {
-        this.rootPath = rootPath;
+        if(rootPath != null) {
+            this.rootPath = rootPath;
 
-        watchService = rootPath
-                .getFileSystem().newWatchService();
-        registerRecursive(this.rootPath, watchService);
+            watchService = rootPath
+                    .getFileSystem().newWatchService();
+            registerRecursive(this.rootPath, watchService);
 
-        PianaAssetResolver resolver = this;
-        Executors.newSingleThreadExecutor()
-                .execute(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            resolver.watchKey = watchService.take();
-                            Executors.newScheduledThreadPool(5)
-                                    .scheduleWithFixedDelay(
-                                            resolver, 5, 10,
-                                            TimeUnit.SECONDS);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }
-        );
+            PianaAssetResolver resolver = this;
+            Executors.newSingleThreadExecutor()
+                    .execute(() -> {
+                                try {
+                                    resolver.watchKey = watchService.take();
+                                    Executors.newScheduledThreadPool(5)
+                                            .scheduleWithFixedDelay(
+                                                    resolver, 5, 10,
+                                                    TimeUnit.SECONDS);
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                    );
+        }
     }
 
     public static PianaAssetResolver getInstance(
@@ -163,5 +162,4 @@ public class PianaAssetResolver implements Runnable {
         pianaAsset = reload(path);
         return pianaAsset;
     }
-
 }
