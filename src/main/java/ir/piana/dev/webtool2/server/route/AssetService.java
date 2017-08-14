@@ -27,7 +27,8 @@ class AssetService {
         return new PianaResponse(
                 Status.OK,
                 asset.getBytes(),
-                asset.getMediaType());
+                asset.getMediaType(),
+                Charset.forName("UTF-8"));
     }
 
     //called at all condition
