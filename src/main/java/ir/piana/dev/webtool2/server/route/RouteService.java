@@ -179,7 +179,7 @@ public class RouteService {
         ResponseBuilder resBuilder = Response
                 .status(
                         pianaResponse.getResponseStatus());
-        if(pianaResponse.getStatus() != 0) {
+        if(pianaResponse.getStatus() >= 0) {
             resBuilder.entity(new ResponseByStatus(
                     pianaResponse.getStatus(),
                     pianaResponse.getEntity()))
