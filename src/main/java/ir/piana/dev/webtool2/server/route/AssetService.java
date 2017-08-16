@@ -25,7 +25,7 @@ class AssetService {
             return notFoundResponse();
         }
         return new PianaResponse(
-                Status.OK, 0,
+                Status.OK,
                 asset.getBytes(),
                 asset.getMediaType());
     }
@@ -48,7 +48,6 @@ class AssetService {
             }
             return new PianaResponse(
                     Status.OK,
-                    0,
                     asset.getBytes(),
                     asset.getMediaType(),
                     Charset.forName("UTF-8"));
@@ -58,7 +57,6 @@ class AssetService {
     protected static PianaResponse notFoundResponse() {
         return new PianaResponse(
                 Status.NOT_FOUND,
-                0,
                 "not found asset",
                 MediaType.TEXT_PLAIN);
     }

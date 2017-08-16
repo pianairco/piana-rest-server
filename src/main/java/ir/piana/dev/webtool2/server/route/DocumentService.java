@@ -43,7 +43,7 @@ class DocumentService extends RouteService {
             return notFoundResponse();
         }
         return new PianaResponse(
-                Response.Status.OK, 0,
+                Response.Status.OK,
                 asset.getBytes(),
                 MediaType.TEXT_HTML);
     }
@@ -79,7 +79,7 @@ class DocumentService extends RouteService {
 
         if(serviceModels != null)
             return new PianaResponse(
-                    Response.Status.OK, 1,
+                    Response.Status.OK, 0,
                     serviceModels,
                     MediaType.APPLICATION_JSON);
 
@@ -132,14 +132,14 @@ class DocumentService extends RouteService {
 //        serviceModels.add(serviceModel);
 
         return new PianaResponse(
-                Response.Status.OK, 1,
+                Response.Status.OK, 0,
                 serviceModels,
                 MediaType.APPLICATION_JSON);
     }
 
     protected static PianaResponse notFoundResponse() {
         return new PianaResponse(
-                Response.Status.NOT_FOUND, 0,
+                Response.Status.NOT_FOUND,
                 "not found asset",
                 MediaType.TEXT_PLAIN);
     }

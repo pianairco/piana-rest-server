@@ -8,6 +8,8 @@ import java.nio.charset.Charset;
  * @author Mohammad Rahmati, 5/10/2017 10:52 AM
  */
 public class PianaResponse {
+    public static final int DEFAULT_STATUS = -1;
+
     private Status responseStatus;
     private int status;
     private Object entity;
@@ -16,7 +18,7 @@ public class PianaResponse {
 
     public PianaResponse() {
         this(Status.NO_CONTENT,
-                0,
+                DEFAULT_STATUS,
                 null,
                 MediaType.APPLICATION_JSON,
                 Charset.forName("ASCII"));
@@ -24,7 +26,7 @@ public class PianaResponse {
 
     public PianaResponse(Status responseStatus,
                          Object entity) {
-        this(responseStatus, 0, entity,
+        this(responseStatus, DEFAULT_STATUS, entity,
                 MediaType.APPLICATION_JSON,
                 Charset.forName("ASCII"));
     }
@@ -38,6 +40,16 @@ public class PianaResponse {
     }
 
     public PianaResponse(Status responseStatus,
+                         Object entity,
+                         String mediaType) {
+        this(responseStatus,
+                DEFAULT_STATUS,
+                entity,
+                mediaType,
+                Charset.forName("ASCII"));
+    }
+
+    public PianaResponse(Status responseStatus,
                          int status,
                          Object entity,
                          String mediaType) {
@@ -46,6 +58,17 @@ public class PianaResponse {
                 entity,
                 mediaType,
                 Charset.forName("ASCII"));
+    }
+
+    public PianaResponse(Status responseStatus,
+                         Object entity,
+                         String mediaType,
+                         Charset charset) {
+        this(responseStatus,
+                DEFAULT_STATUS,
+                entity,
+                mediaType,
+                charset);
     }
 
     public PianaResponse(Status responseStatus,

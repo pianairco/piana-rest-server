@@ -116,7 +116,10 @@ public abstract class HandlerClassCreator {
     private final String makeClassAnnotation() {
         StringBuilder sb = new StringBuilder();
         sb.append("@Singleton\n");
-        sb.append("@Path(\"".concat(handler.baseUrl()).concat("\")\n"));
+        sb.append("@Path(\""
+                .concat(pianaServer.httpBaseUrl())
+                .concat(handler.baseUrl())
+                .concat("\")\n"));
         return sb.toString();
     }
 
