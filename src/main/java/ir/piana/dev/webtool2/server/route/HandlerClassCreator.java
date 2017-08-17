@@ -82,6 +82,7 @@ public abstract class HandlerClassCreator {
 //        sb.append("import javax.ws.rs.container.AsyncResponse;");
         sb.append("import javax.ws.rs.core.*;\n");
         sb.append("import javax.ws.rs.*;\n");
+        sb.append("import org.apache.log4j.Logger;\n");
         sb.append("import javax.inject.Singleton;\n");
         sb.append("import java.lang.reflect.Method;\n");
         sb.append("import ir.piana.dev.webtool2.server.route.*;\n");
@@ -127,6 +128,8 @@ public abstract class HandlerClassCreator {
         StringBuilder sb = new StringBuilder();
         sb.append("public class ".concat(className)
                 .concat(" extends RouteService {\n"));
+        sb.append("Logger logger = Logger.getLogger("
+                .concat(className).concat(".class);\n"));
         return sb.toString();
     }
 

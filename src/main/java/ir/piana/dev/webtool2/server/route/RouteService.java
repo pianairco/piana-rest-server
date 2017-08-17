@@ -1,6 +1,5 @@
 package ir.piana.dev.webtool2.server.route;
 
-import ir.piana.dev.webtool2.server.annotation.MethodHandler;
 import ir.piana.dev.webtool2.server.annotation.PianaServer;
 import ir.piana.dev.webtool2.server.asset.PianaAssetResolver;
 import ir.piana.dev.webtool2.server.response.PianaResponse;
@@ -27,8 +26,7 @@ import java.util.stream.Stream;
  * @author Mohammad Rahmati, 5/3/2017 7:28 AM
  */
 public class RouteService {
-    protected Logger logger = Logger
-            .getLogger(RouteService.class);
+    protected Logger logger;
     protected static ExecutorService executorService =
             Executors.newFixedThreadPool(256);
 
