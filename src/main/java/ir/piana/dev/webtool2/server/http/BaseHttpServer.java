@@ -5,6 +5,7 @@ import ir.piana.dev.webtool2.server.filter.response.CORSFilter;
 import ir.piana.dev.webtool2.server.route.RouteClassGenerator;
 import ir.piana.dev.webtool2.server.session.SessionManager;
 import org.apache.log4j.Logger;
+import org.glassfish.jersey.jackson.JacksonFeature;
 import org.glassfish.jersey.server.ResourceConfig;
 
 import javax.ws.rs.core.UriBuilder;
@@ -71,6 +72,7 @@ public abstract class BaseHttpServer {
 
 //        resourceConfig.registerClasses(routeClasses);
 //        resourceConfig.registerClasses(documentClasses);
+        resourceConfig.register(JacksonFeature.class);
         resourceConfig.register(CORSFilter.class);
 
         sessionManager = SessionManager

@@ -30,6 +30,14 @@ public class PianaAssetResolver implements Runnable {
     private WatchService watchService;
     private WatchKey watchKey;
 
+    private static MimetypesFileTypeMap mimeTypesMap = null;
+
+    static {
+        mimeTypesMap = new MimetypesFileTypeMap(
+                PianaAssetResolver.class.getResourceAsStream("/mime.types")
+        );
+    }
+
     private PianaAssetResolver(Path rootPath)
             throws IOException, InterruptedException {
         if(rootPath != null) {
@@ -132,8 +140,8 @@ public class PianaAssetResolver implements Runnable {
             String mediaType = Files
                     .probeContentType(file.toPath());
             if(mediaType == null || mediaType.isEmpty())
-                mediaType = new MimetypesFileTypeMap()
-                    .getContentType(file);
+                mediaType = mimeTypesMap.getContentType(file);
+
             byte[] bytes = new byte[available];
             int read = fileInputStream.read(bytes, 0, available);
             if(read == available) {
