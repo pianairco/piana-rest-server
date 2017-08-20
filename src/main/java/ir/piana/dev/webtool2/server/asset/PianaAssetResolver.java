@@ -137,10 +137,13 @@ public class PianaAssetResolver implements Runnable {
         try (FileInputStream fileInputStream =
                      new FileInputStream(file)) {
             int available = fileInputStream.available();
-            String mediaType = Files
-                    .probeContentType(file.toPath());
-            if(mediaType == null || mediaType.isEmpty())
-                mediaType = mimeTypesMap.getContentType(file);
+            String mediaType = mimeTypesMap.getContentType(file);
+            if(mediaType == null || mediaType.isEmpty()
+                    || mediaType.equalsIgnoreCase("application/octet-stream")) {
+                mediaType = Files.probeContentType(file.toPath());
+                mediaType = mediaType == null || mediaType.isEmpty() ?
+                        "application/octet-stream" : mediaType;
+            }
 
             byte[] bytes = new byte[available];
             int read = fileInputStream.read(bytes, 0, available);
