@@ -151,8 +151,9 @@ public class PianaAssetResolver implements Runnable {
                 pianaAsset = new PianaAsset(bytes,
                         rootPath.toString(),
                         path, mediaType);
-                assetsMap.put(pianaAsset.getPath().toString(),
-                        pianaAsset);
+//                assetsMap.put(pianaAsset.getPath().toString(),
+//                        pianaAsset);
+                assetsMap.put(path, pianaAsset);
             }
             logger.info("load asset");
         } catch (Exception ex) {
