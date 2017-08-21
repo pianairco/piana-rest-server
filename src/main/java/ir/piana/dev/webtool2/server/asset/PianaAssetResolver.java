@@ -30,6 +30,14 @@ public class PianaAssetResolver implements Runnable {
     private WatchService watchService;
     private WatchKey watchKey;
 
+    private static MimetypesFileTypeMap mimeTypesMap = null;
+
+    static {
+        mimeTypesMap = new MimetypesFileTypeMap(
+                PianaAssetResolver.class.getResourceAsStream("/mime.types")
+        );
+    }
+
     private PianaAssetResolver(Path rootPath)
             throws IOException, InterruptedException {
         if(rootPath != null) {
@@ -129,19 +137,23 @@ public class PianaAssetResolver implements Runnable {
         try (FileInputStream fileInputStream =
                      new FileInputStream(file)) {
             int available = fileInputStream.available();
-            String mediaType = Files
-                    .probeContentType(file.toPath());
-            if(mediaType == null || mediaType.isEmpty())
-                mediaType = new MimetypesFileTypeMap()
-                    .getContentType(file);
+            String mediaType = mimeTypesMap.getContentType(file);
+            if(mediaType == null || mediaType.isEmpty()
+                    || mediaType.equalsIgnoreCase("application/octet-stream")) {
+                mediaType = Files.probeContentType(file.toPath());
+                mediaType = mediaType == null || mediaType.isEmpty() ?
+                        "application/octet-stream" : mediaType;
+            }
+
             byte[] bytes = new byte[available];
             int read = fileInputStream.read(bytes, 0, available);
             if(read == available) {
                 pianaAsset = new PianaAsset(bytes,
                         rootPath.toString(),
                         path, mediaType);
-                assetsMap.put(pianaAsset.getPath().toString(),
-                        pianaAsset);
+//                assetsMap.put(pianaAsset.getPath().toString(),
+//                        pianaAsset);
+                assetsMap.put(path, pianaAsset);
             }
             logger.info("load asset");
         } catch (Exception ex) {
