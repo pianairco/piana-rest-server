@@ -21,9 +21,11 @@ public class OneMethodHandler {
     @MethodHandler(requiredRole = RoleType.GUEST, sync = false)
     @Path("{family}")
     public static PianaResponse getHello(
-            Session session,
             @MapParam Map<String, List<String>> map,
-            @QueryParam("name") String name, @PathParam("family") StringBuilder family) {
-        return new PianaResponse(Response.Status.OK, 1, msg + " " + name + " " + family);
+            @QueryParam("name") String name,
+            @PathParam("family") String family) {
+//        int remotePort = request.getRemotePort();
+        return new PianaResponse(
+                Response.Status.OK, 1, msg + " " + name + " " + family);
     }
 }

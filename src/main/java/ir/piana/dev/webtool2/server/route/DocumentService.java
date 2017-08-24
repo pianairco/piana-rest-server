@@ -33,7 +33,7 @@ class DocumentService extends RouteService {
 
     @MethodHandler
     public static PianaResponse getPianaDocument(
-            Session session,
+            @SessionParam Session session,
             @MapParam Map<String, List<String>> map) {
         PianaAsset asset = null;
         try {
@@ -74,7 +74,7 @@ class DocumentService extends RouteService {
     @MethodHandler
     @Path("service-models")
     public static PianaResponse getPianaServiceModels(
-            Session session,
+            @SessionParam Session session,
             @MapParam Map<String, List<String>> map) {
 
         if(serviceModels != null)
