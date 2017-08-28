@@ -100,11 +100,19 @@ public class PianaAssetResolver implements Runnable {
                         }
                     }
                 } else {
-                    assetsMap.remove(fullPath);
+                    String substring = fullPath.toString().substring(
+                            fullPath.toString().indexOf(rootPath.toString()) + rootPath.toString().length() + 1)
+                            .replace("\\", "/");
+//                    assetsMap.remove(fullPath);
+                    assetsMap.remove(substring);
                 }
             } else if (changedKind == ENTRY_MODIFY) {
                 if (!file.isDirectory()) {
-                    assetsMap.remove(fullPath.toString());
+                    String substring = fullPath.toString().substring(
+                            fullPath.toString().indexOf(rootPath.toString()) + rootPath.toString().length() + 1)
+                            .replace("\\", "/");
+//                    assetsMap.remove(fullPath.toString());
+                    assetsMap.remove(substring);
                 }
             }
         }
@@ -154,6 +162,7 @@ public class PianaAssetResolver implements Runnable {
 //                assetsMap.put(pianaAsset.getPath().toString(),
 //                        pianaAsset);
                 assetsMap.put(path, pianaAsset);
+//                assetsMap.put(file.getPath(), pianaAsset);
             }
             logger.info("load asset");
         } catch (Exception ex) {
@@ -167,6 +176,7 @@ public class PianaAssetResolver implements Runnable {
             throws Exception {
         if(path == null)
             return null;
+//        PianaAsset pianaAsset = assetsMap.get(rootPath.toString().concat("\\").concat(path));
         PianaAsset pianaAsset = assetsMap.get(path);
         if(pianaAsset != null) {
             return pianaAsset;
