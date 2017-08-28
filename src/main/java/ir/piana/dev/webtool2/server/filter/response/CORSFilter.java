@@ -5,6 +5,8 @@ import ir.piana.dev.webtool2.server.annotation.PianaServerCORS;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Singleton;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerResponseContext;
 import javax.ws.rs.container.ContainerResponseFilter;
@@ -20,6 +22,7 @@ public class CORSFilter
         implements ContainerResponseFilter {
     @Context
     private Configuration config;
+
     private PianaServer pianaServer = null;
     private PianaServerCORS serverCORS = null;
 

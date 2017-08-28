@@ -91,6 +91,8 @@ public abstract class HandlerClassCreator {
         sb.append("import ir.piana.dev.webtool2.server.session.*;\n");
         sb.append("import java.util.List;\n");
         sb.append("import java.util.Map;\n");
+        sb.append("import java.lang.String;\n");
+        sb.append("import ir.piana.dev.webtool2.server.annotation.SessionParam;\n");
 
         if(handler.handlerType() == HandlerType.ASSET_HANDLER) {
             sb.append("import ir.piana.dev.webtool2.server.asset.*;\n");

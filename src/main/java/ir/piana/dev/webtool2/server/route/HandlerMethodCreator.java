@@ -5,6 +5,7 @@ import ir.piana.dev.secure.random.SecureRandomType;
 import ir.piana.dev.secure.util.HexConverter;
 import ir.piana.dev.webtool2.server.annotation.*;
 import ir.piana.dev.webtool2.server.role.RoleType;
+import ir.piana.dev.webtool2.server.session.Session;
 import org.apache.log4j.Logger;
 
 import javax.ws.rs.*;
@@ -430,16 +431,25 @@ public abstract class HandlerMethodCreator {
             StringBuilder sb = new StringBuilder();
             sb.append("public Response ".concat(method.getName())
                     .concat("(@Context HttpHeaders httpHeaders,"));
+//                    .concat("@Context HttpServletResponse response,")
+//                    .concat("@Context HttpServletRequest request,"));
             Parameter[] parameters = method.getParameters();
-            for (int i = 1; i < parameters.length; i++) {
-                PathParam pathParam = parameters[i].getAnnotation(PathParam.class);
-                QueryParam queryParam = parameters[i].getAnnotation(QueryParam.class);
+            for (int i = 0; i < parameters.length; i++) {
+                SessionParam sessionParam = parameters[i]
+                        .getAnnotation(SessionParam.class);
+                PathParam pathParam = parameters[i]
+                        .getAnnotation(PathParam.class);
+                QueryParam queryParam = parameters[i]
+                        .getAnnotation(QueryParam.class);
                 BodyObjectParam bodyObjectParam = parameters[i]
                         .getAnnotation(BodyObjectParam.class);
                 MapParam mapParam = parameters[i].getAnnotation(MapParam.class);
-                if(pathParam != null)
+                if(sessionParam != null) {
+
+                } else if(pathParam != null)
                     sb.append("@PathParam(\"".concat(pathParam.value())
-                            .concat("\")").concat(parameters[i].toString()).concat(","));
+                            .concat("\")").concat(parameters[i].toString())
+                            .concat(","));
                 else if(queryParam != null)
                     sb.append("@QueryParam(\"".concat(queryParam.value())
                             .concat("\")").concat(parameters[i].toString()).concat(","));
@@ -468,16 +478,22 @@ public abstract class HandlerMethodCreator {
             sb.append("try {\n");
             sb.append("Method m = registerMethod(\""
                     .concat(method.getName())
-                    .concat("\",\"").concat(method.getDeclaringClass().getName()).concat("\",\"")
-                    .concat(method.getName()).concat("\",Session.class,"));
+                    .concat("\",\"").concat(method.getDeclaringClass().getName())
+                    .concat("\",\"")
+                    .concat(method.getName()).concat("\","));
             Parameter[] parameters = method.getParameters();
-            for (int i = 1; i < parameters.length; i++) {
+            for (int i = 0; i < parameters.length; i++) {
+                SessionParam sessionParam = parameters[i]
+                        .getAnnotation(SessionParam.class);
                 PathParam pathParam = parameters[i].getAnnotation(PathParam.class);
                 QueryParam queryParam = parameters[i].getAnnotation(QueryParam.class);
                 BodyObjectParam bodyObjectParam = parameters[i]
                         .getAnnotation(BodyObjectParam.class);
                 MapParam mapParam = parameters[i].getAnnotation(MapParam.class);
-                if(pathParam != null || queryParam != null || bodyObjectParam != null)
+                if(pathParam != null
+                        || queryParam != null
+                        || bodyObjectParam != null
+                        || sessionParam != null)
                     sb.append(parameters[i].getType().getName().concat(".class,"));
                 else if(mapParam != null)
                     sb.append("Map.class,");
@@ -486,15 +502,21 @@ public abstract class HandlerMethodCreator {
             }
             sb.deleteCharAt(sb.length() - 1);
             sb.append(");\n");
-            sb.append("return createResponse(invokeMethod(m, session,");
-            for (int i = 1; i < parameters.length; i++) {
+            sb.append("return createResponse(invokeMethod(m,");
+            for (int i = 0; i < parameters.length; i++) {
+                SessionParam sessionParam = parameters[i]
+                        .getAnnotation(SessionParam.class);
                 PathParam pathParam = parameters[i].getAnnotation(PathParam.class);
                 QueryParam queryParam = parameters[i].getAnnotation(QueryParam.class);
                 BodyObjectParam bodyObjectParam = parameters[i]
                         .getAnnotation(BodyObjectParam.class);
                 MapParam mapParam = parameters[i].getAnnotation(MapParam.class);
-                if(pathParam != null || queryParam != null || bodyObjectParam != null)
+                if(pathParam != null
+                        || queryParam != null
+                        || bodyObjectParam != null)
                     sb.append(parameters[i].getName().concat(","));
+                else if(sessionParam != null)
+                    sb.append("session,");
                 else if (mapParam != null)
                     sb.append("createMapParam(uriInfo),");
                 else
@@ -527,13 +549,15 @@ public abstract class HandlerMethodCreator {
                     .concat("@Context HttpHeaders httpHeaders,"));
 
             Parameter[] parameters = method.getParameters();
-            for (int i = 1; i < parameters.length; i++) {
+            for (int i = 0; i < parameters.length; i++) {
+                SessionParam sessionParam = parameters[i].getAnnotation(SessionParam.class);
                 PathParam pathParam = parameters[i].getAnnotation(PathParam.class);
                 QueryParam queryParam = parameters[i].getAnnotation(QueryParam.class);
                 BodyObjectParam bodyObjectParam = parameters[i]
                         .getAnnotation(BodyObjectParam.class);
                 MapParam mapParam = parameters[i].getAnnotation(MapParam.class);
-                if(pathParam != null)
+                if(sessionParam != null) {
+                } else if(pathParam != null)
                     sb.append("@PathParam(\"".concat(pathParam.value())
                             .concat("\")").concat(parameters[i].toString()).concat(","));
                 else if(queryParam != null)
@@ -566,15 +590,19 @@ public abstract class HandlerMethodCreator {
             sb.append("Method m = registerMethod(\""
                     .concat(method.getName())
                     .concat("\",\"").concat(method.getDeclaringClass().getName()).concat("\",\"")
-                    .concat(method.getName()).concat("\",Session.class,"));
+                    .concat(method.getName()).concat("\","));
             Parameter[] parameters = method.getParameters();
-            for (int i = 1; i < parameters.length; i++) {
+            for (int i = 0; i < parameters.length; i++) {
+                SessionParam sessionParam = parameters[i].getAnnotation(SessionParam.class);
                 PathParam pathParam = parameters[i].getAnnotation(PathParam.class);
                 QueryParam queryParam = parameters[i].getAnnotation(QueryParam.class);
                 BodyObjectParam bodyObjectParam = parameters[i]
                         .getAnnotation(BodyObjectParam.class);
                 MapParam mapParam = parameters[i].getAnnotation(MapParam.class);
-                if(pathParam != null || queryParam != null || bodyObjectParam != null)
+                if(pathParam != null
+                        || queryParam != null
+                        || bodyObjectParam != null
+                        || sessionParam != null)
                     sb.append(parameters[i].getType().getName().concat(".class,"));
                 else if(mapParam != null)
                     sb.append("Map.class,");
@@ -583,8 +611,9 @@ public abstract class HandlerMethodCreator {
             }
             sb.deleteCharAt(sb.length() - 1);
             sb.append(");\n");
-            sb.append("asyncResponse.resume(createResponse(invokeMethod(m, session,");
-            for (int i = 1; i < parameters.length; i++) {
+            sb.append("asyncResponse.resume(createResponse(invokeMethod(m,");
+            for (int i = 0; i < parameters.length; i++) {
+                SessionParam sessionParam = parameters[i].getAnnotation(SessionParam.class);
                 PathParam pathParam = parameters[i].getAnnotation(PathParam.class);
                 QueryParam queryParam = parameters[i].getAnnotation(QueryParam.class);
                 BodyObjectParam bodyObjectParam = parameters[i]
@@ -592,6 +621,8 @@ public abstract class HandlerMethodCreator {
                 MapParam mapParam = parameters[i].getAnnotation(MapParam.class);
                 if(pathParam != null || queryParam != null || bodyObjectParam != null)
                     sb.append(parameters[i].getName().concat(","));
+                else if (sessionParam != null)
+                    sb.append("session,");
                 else if (mapParam != null)
                     sb.append("createMapParam(uriInfo),");
                 else
