@@ -1,15 +1,16 @@
 package ir.piana.dev.webtool2.server.http;
 
 import ir.piana.dev.webtool2.server.annotation.PianaServer;
-import ir.piana.dev.webtool2.server.filter.request.PianaRequestFilter;
 import ir.piana.dev.webtool2.server.filter.response.CORSFilter;
 import ir.piana.dev.webtool2.server.route.RouteClassGenerator;
+import ir.piana.dev.webtool2.server.websocket.WebSocketClassGenerator;
 import ir.piana.dev.webtool2.server.session.SessionManager;
 import org.apache.log4j.Logger;
 import org.glassfish.jersey.jackson.JacksonFeature;
 import org.glassfish.jersey.server.ResourceConfig;
 
 import javax.ws.rs.core.UriBuilder;
+import java.net.ServerSocket;
 import java.net.URI;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -56,6 +57,8 @@ public abstract class BaseHttpServer {
             return;
         }
 
+        Set<ServerSocket> webSockets = WebSocketClassGenerator
+                .generateWebsocketClasses(pianaServer);
         Set<Class<?>> handlerClasses = RouteClassGenerator
                 .generateHandlerClasses(pianaServer);
         resourceConfig.registerClasses(handlerClasses);
@@ -65,20 +68,19 @@ public abstract class BaseHttpServer {
 //
 //        Set<Class<?>> documentClasses = RouteClassGenerator
 //                .generateDocumentClasses(pianaServer);
-
 //        if(serverConfig.hasDocPath()) {
 //            DocumentResolver.initialize(
 //                    serverConfig.getDocPath());
 //        }
-
 //        resourceConfig.registerClasses(routeClasses);
 //        resourceConfig.registerClasses(documentClasses);
-        resourceConfig.register(JacksonFeature.class);
 //        resourceConfig.register(PianaRequestFilter.class);
+
+        resourceConfig.register(JacksonFeature.class);
         resourceConfig.register(CORSFilter.class);
 
         sessionManager = SessionManager
-                .createSessionManager(pianaServer.serverSession());
+                .getSessionManager(pianaServer.serverSession());
 
         httpProperties.put(
                 "PIANA_SERVER_CONFIG",

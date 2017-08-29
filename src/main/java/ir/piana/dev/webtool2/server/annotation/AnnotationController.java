@@ -141,6 +141,22 @@ public abstract class AnnotationController {
         return annotation;
     }
 
+    public static List<Class> getClassesAnnotatedWithWebSocket() {
+        List<Class> classes = new ArrayList<>();
+        Reflections reflections = new Reflections();
+        Set<Class<?>> typesAnnotatedWith = reflections
+                .getTypesAnnotatedWith(PianaWebSocket.class);
+        if(typesAnnotatedWith != null && !typesAnnotatedWith.isEmpty())
+            classes.addAll(typesAnnotatedWith);
+        return classes;
+    }
+
+    public static PianaWebSocket getPianaWebSocket(Class targetClass) {
+        Annotation annotation = targetClass
+                .getAnnotation(PianaWebSocket.class);
+        return annotation == null ? null : (PianaWebSocket) annotation;
+    }
+
     public static List<Class> getHandlerClasses() {
         List<Class> classes = new ArrayList<>();
         Reflections reflections = new Reflections();

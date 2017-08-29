@@ -25,7 +25,9 @@ public class SessionManager {
     private PianaCacheProvider cacheProvider = null;
     protected PianaServerSession serverSession;
 
-    public SessionManager(
+    protected static SessionManager sessionManager = null;
+
+    private SessionManager(
             PianaServerSession serverSession) {
         this.serverSession = serverSession;
         cacheProvider =
@@ -35,10 +37,15 @@ public class SessionManager {
                         serverSession.sessionExpiredSecond());
     }
 
-    public static SessionManager createSessionManager(
+    public static synchronized SessionManager getSessionManager(
             PianaServerSession serverSession) {
-        return new SessionManager(
+        if(sessionManager != null)
+            return sessionManager;
+        if (serverSession == null)
+            return null;
+        sessionManager = new SessionManager(
                 serverSession);
+        return sessionManager;
     }
 
     public Session revivalSession(

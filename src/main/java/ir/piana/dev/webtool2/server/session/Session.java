@@ -3,6 +3,7 @@ package ir.piana.dev.webtool2.server.session;
 import ir.piana.dev.secure.crypto.CryptoAttribute;
 import ir.piana.dev.secure.crypto.CryptoMaker;
 import ir.piana.dev.webtool2.server.role.RoleType;
+import ir.piana.dev.webtool2.server.websocket.PianaWebSocketHandler;
 
 import java.security.KeyPair;
 import java.util.*;
@@ -16,6 +17,7 @@ public class Session {
     private KeyPair keyPair;
     private RoleType roleType;
     private String sessionKey;
+    private PianaWebSocketHandler webSocketHandler;
     private Map<String, String> stringMap;
     private Map<String, Object> objectMap;
 
@@ -110,5 +112,13 @@ public class Session {
 
     public void setWrongdoer(Boolean wrongdoer) {
         this.wrongdoer = wrongdoer;
+    }
+
+    public PianaWebSocketHandler getWebSocketHandler() {
+        return webSocketHandler;
+    }
+
+    public void setWebSocketHandler(PianaWebSocketHandler webSocketHandler) {
+        this.webSocketHandler = webSocketHandler;
     }
 }
