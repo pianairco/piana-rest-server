@@ -17,7 +17,8 @@ public class PianaWebSocketHandler {
     }
 
     public boolean sendText(String text) {
-        try (OutputStream os = socket.getOutputStream()){
+        try {
+            OutputStream os = socket.getOutputStream();
             int textLength = text.length() > 125 ?
                     (text.length() > 65536 ? 8 : 2) : 0;
             byte[] bytes = new byte[text.length() + 2 + textLength];

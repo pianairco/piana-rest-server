@@ -9,8 +9,6 @@ import ir.piana.dev.webtool2.server.session.Session;
 import ir.piana.dev.webtool2.server.session.SessionManager;
 import org.apache.log4j.Logger;
 
-import javax.ws.rs.core.Cookie;
-import javax.xml.bind.DatatypeConverter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -54,27 +52,18 @@ public class WebSocketClassGenerator {
                     while (true) {
                         Socket client = serverSocket.accept();
                         executorService.execute(() -> {
-                            System.out.println("A client connected.");
+                            logger.info("A client connected.");
 
                             try {
                                 InputStream in = client.getInputStream();
 
-                                OutputStream out = client.getOutputStream();
-
                                 String data = new Scanner(in, "UTF-8")
                                         .useDelimiter("\\r\\n\\r\\n").next();
-//                                System.out.println(data);
                                 Matcher get = Pattern.compile("^GET").matcher(data);
                                 if (get.find()) {
                                     Matcher match = Pattern.compile("Sec-WebSocket-Key: (.*)").matcher(data);
                                     match.find();
-                                    byte[] response = ("HTTP/1.1 101 Switching Protocols\r\n"
-                                            + "Connection: Upgrade\r\n"
-                                            + "Upgrade: websocket\r\n"
-                                            + "Sec-WebSocket-Accept: "
-                                            + HashMaker.getBase64Hash((match.group(1) + "258EAFA5-E914-47DA-95CA-C5AB0DC85B11"), HashType.SHA)
-                                            + "\r\n\r\n").getBytes("UTF-8");
-                                    out.write(response, 0, response.length);
+
 //                                    byte[] inBytes = new byte[1024];
 //                                    int read = in.read(inBytes);
 //                                    if(read > 0) {
@@ -116,32 +105,47 @@ public class WebSocketClassGenerator {
 //                                    }
                                     Matcher cookie = Pattern.compile(".*Cookie.*").matcher(data);
                                     if(cookie.find()) {
-                                        System.out.println("have cookie");
+//                                        System.out.println("have cookie");
                                         Matcher pianaSession = Pattern.compile(".*" +
                                                 pianaServer.serverSession().sessionName() +
                                                 ".*").matcher(data);
                                         if(pianaSession.find()) {
-                                            System.out.println("have session");
+//                                            System.out.println("have session");
                                             int startIndex = data.indexOf(pianaServer.serverSession().sessionName());
                                             String substring = data.substring(startIndex);
                                             String sessionKey = substring.substring(substring.indexOf("=") + 1,
                                                     substring.indexOf("=") + 1 + 36);
-                                            System.out.println(substring);
+//                                            System.out.println(substring);
                                             Session session = SessionManager.getSessionManager(pianaServer.serverSession())
                                                     .retrieveSessionIfExist(sessionKey);
                                             if(session != null && session.getWebSocketHandler() != null) {
                                                 session.getWebSocketHandler().closeSocket();
                                             }
+                                            OutputStream out = client.getOutputStream();
+                                            byte[] response = ("HTTP/1.1 101 Switching Protocols\r\n"
+                                                    + "Connection: Upgrade\r\n"
+                                                    + "Upgrade: websocket\r\n"
+                                                    + "Sec-WebSocket-Accept: "
+                                                    + HashMaker.getBase64Hash((match.group(1) + "258EAFA5-E914-47DA-95CA-C5AB0DC85B11"), HashType.SHA)
+                                                    + "\r\n\r\n").getBytes("UTF-8");
+                                            out.write(response, 0, response.length);
                                             session.setWebSocketHandler(new PianaWebSocketHandler(client));
+                                        } else {
+                                            unauthorizeSocket(client);
                                         }
+                                    } else {
+                                        unauthorizeSocket(client);
                                     }
                                 } else {
-
+                                    unauthorizeSocket(client);
                                 }
-                            } catch (IOException e) {
-                                logger.error(e);
                             } catch (Exception e) {
                                 logger.error(e);
+                                try {
+                                    unauthorizeSocket(client);
+                                } catch (IOException e1) {
+                                    logger.error(e);
+                                }
                             }
                         });
                     }
@@ -151,5 +155,14 @@ public class WebSocketClassGenerator {
             });
         }
         return serverSockets;
+    }
+
+    public static void unauthorizeSocket(Socket client) throws IOException {
+        OutputStream out = client.getOutputStream();
+        byte[] response = ("HTTP/1.1 401 Unauthorized\r\n"
+                + "\r\n\r\n").getBytes("UTF-8");
+        out.write(response, 0, response.length);
+        out.close();
+        client.close();
     }
 }
