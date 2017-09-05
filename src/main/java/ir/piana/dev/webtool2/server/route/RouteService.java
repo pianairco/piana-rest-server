@@ -12,6 +12,7 @@ import javax.ws.rs.core.*;
 import javax.ws.rs.core.Response.ResponseBuilder;
 import javax.ws.rs.core.Response.Status;
 import java.io.File;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -164,8 +165,13 @@ public class RouteService {
             Method method,
             Object... parameters
     ) throws Exception {
-        return (PianaResponse) method
-                .invoke(null, parameters);
+        try {
+            return (PianaResponse) method
+                    .invoke(null, parameters);
+        } catch (InvocationTargetException ex) {
+            logger.error(ex.getTargetException());
+            throw ex;
+        }
     }
 
     protected Response createResponse(
