@@ -58,6 +58,8 @@ public class PianaAssetResolver implements Runnable {
                                                     TimeUnit.SECONDS);
                                 } catch (InterruptedException e) {
                                     e.printStackTrace();
+                                } finally {
+                                    resolver.watchKey.reset();
                                 }
                             }
                     );
