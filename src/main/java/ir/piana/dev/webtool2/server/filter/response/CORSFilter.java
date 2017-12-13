@@ -36,17 +36,25 @@ public class CORSFilter
     public void filter(ContainerRequestContext request,
                        ContainerResponseContext response)
             throws IOException {
+        response.getHeaders().add("Cache-Control", "no-cache");
         response.getHeaders().addAll(
                 "Access-Control-Allow-Origin",
                 serverCORS.allowOrigin());
+        String allowHeaders = "";
+        for (String allowHeader : serverCORS.allowHeaders())
+            allowHeaders = allowHeaders.concat(allowHeader).concat(";");
         response.getHeaders().addAll(
                 "Access-Control-Allow-Headers",
-                serverCORS.allowHeaders());
+                allowHeaders);
         response.getHeaders().add(
                 "Access-Control-Allow-Credentials",
                 serverCORS.allowCredentials());
+        String allowMethods = "";
+        for (String allowMethod : serverCORS.allowMethods())
+            allowMethods = allowMethods.concat(allowMethod).concat(";");
         response.getHeaders().addAll(
                 "Access-Control-Allow-Methods",
-                serverCORS.allowMethods());
+                allowMethods);
+//                serverCORS.allowMethods());
     }
 }
