@@ -186,8 +186,14 @@ public class RouteService {
         if(pianaResponse.getStatus() >= 0) {
             resBuilder.entity(new ResponseByStatus(
                     pianaResponse.getStatus(),
-                    pianaResponse.getEntity()))
-                    .header("Content-Type",
+                    pianaResponse.getEntity()));
+
+            for (Map.Entry<String, String> header : pianaResponse.getHeaders()) {
+                if(!header.getKey().equalsIgnoreCase("Content-Type"))
+                    resBuilder.header(header.getKey(), header.getValue());
+            }
+
+            resBuilder.header("Content-Type",
                             MediaType.APPLICATION_JSON
                                     .concat("; charset=")
                                     .concat(pianaResponse
@@ -195,13 +201,18 @@ public class RouteService {
                                             .displayName()));
         }
         else {
-            resBuilder.entity(pianaResponse.getEntity())
-                    .header("Content-Type",
-                            pianaResponse.getMediaType()
-                                    .concat("; charset=")
-                                    .concat(pianaResponse
-                                            .getCharset()
-                                            .displayName()));
+            resBuilder.entity(pianaResponse.getEntity());
+
+            for (Map.Entry<String, String> header : pianaResponse.getHeaders()) {
+                if(!header.getKey().equalsIgnoreCase("Content-Type"))
+                    resBuilder.header(header.getKey(), header.getValue());
+            }
+
+            resBuilder.header("Content-Type",
+                    pianaResponse.getMediaType()
+                            .concat("; charset=")
+                            .concat(pianaResponse.getCharset()
+                                    .displayName()));
         }
         if(serverConfig.removeOtherCookies())
             resBuilder.cookie(sessionManager

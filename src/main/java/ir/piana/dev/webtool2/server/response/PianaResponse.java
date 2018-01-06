@@ -3,6 +3,7 @@ package ir.piana.dev.webtool2.server.response;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response.Status;
 import java.nio.charset.Charset;
+import java.util.*;
 
 /**
  * @author Mohammad Rahmati, 5/10/2017 10:52 AM
@@ -15,6 +16,7 @@ public class PianaResponse {
     private Object entity;
     private String mediaType;
     private Charset charset;
+    private List<Map.Entry<String, String>> headers = new ArrayList<>();
 
     public PianaResponse() {
         this(Status.NO_CONTENT,
@@ -121,5 +123,20 @@ public class PianaResponse {
 
     public void setStatus(int status) {
         this.status = status;
+    }
+
+    public List<Map.Entry<String, String>> getHeaders() {
+        if(headers == null)
+            headers = new ArrayList<>();
+        return headers;
+    }
+
+    public void setHeaders(List<Map.Entry<String, String>> headers) {
+        this.headers = headers;
+    }
+
+    public void addHeader(String name, String value) {
+        headers.add(new AbstractMap.SimpleEntry<String, String>(
+                name, value));
     }
 }
