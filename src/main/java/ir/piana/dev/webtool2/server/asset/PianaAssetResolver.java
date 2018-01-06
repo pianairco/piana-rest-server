@@ -153,6 +153,11 @@ public class PianaAssetResolver implements Runnable {
                 mediaType = Files.probeContentType(file.toPath());
                 mediaType = mediaType == null || mediaType.isEmpty() ?
                         "application/octet-stream" : mediaType;
+                if(mediaType.equalsIgnoreCase("application/octet-stream")){
+                    mediaType = file.toPath().getFileName()
+                            .toString().endsWith(".js") ?
+                            "application/javascript" : mediaType;
+                }
             }
 
             byte[] bytes = new byte[available];
