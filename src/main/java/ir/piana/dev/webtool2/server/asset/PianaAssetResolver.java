@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -49,20 +50,7 @@ public class PianaAssetResolver implements Runnable {
 
             PianaAssetResolver resolver = this;
             Executors.newSingleThreadExecutor()
-                    .execute(() -> {
-                                try {
-                                    resolver.watchKey = watchService.take();
-                                    Executors.newScheduledThreadPool(5)
-                                            .scheduleWithFixedDelay(
-                                                    resolver, 5, 10,
-                                                    TimeUnit.SECONDS);
-                                } catch (InterruptedException e) {
-                                    e.printStackTrace();
-                                } finally {
-                                    resolver.watchKey.reset();
-                                }
-                            }
-                    );
+                    .execute(resolver);
         }
     }
 
@@ -88,35 +76,43 @@ public class PianaAssetResolver implements Runnable {
 
     @Override
     public void run() {
-        for (WatchEvent we : this.watchKey.pollEvents()) {
-            WatchEvent.Kind changedKind = we.kind();
-            Path changedPath = (Path) we.context();
-            Path dir = (Path) this.watchKey.watchable();
-            Path fullPath = dir.resolve(changedPath);
-            File file = new File(fullPath.toString());
-            if (changedKind == ENTRY_DELETE) {
-                if (file.isDirectory()) {
-                    for (String key : assetsMap.keySet()) {
-                        if (key.startsWith(fullPath.toString())) {
-                            assetsMap.remove(key);
+        try {
+            while ((watchKey = watchService.take()) != null) {
+                List<WatchEvent<?>> watchEvents = watchKey.pollEvents();
+                for (WatchEvent we : watchEvents) {
+                    WatchEvent.Kind changedKind = we.kind();
+                    Path changedPath = (Path) we.context();
+                    Path dir = (Path) this.watchKey.watchable();
+                    Path fullPath = dir.resolve(changedPath);
+                    File file = new File(fullPath.toString());
+                    if (changedKind == ENTRY_DELETE) {
+                        if (file.isDirectory()) {
+                            for (String key : assetsMap.keySet()) {
+                                if (key.startsWith(fullPath.toString())) {
+                                    assetsMap.remove(key);
+                                }
+                            }
+                        } else {
+                            String substring = fullPath.toString().substring(
+                                    fullPath.toString().indexOf(rootPath.toString()) + rootPath.toString().length() + 1)
+                                    .replace("\\", "/");
+//                    assetsMap.remove(fullPath);
+                            assetsMap.remove(substring);
+                        }
+                    } else if (changedKind == ENTRY_MODIFY) {
+                        if (!file.isDirectory()) {
+                            String substring = fullPath.toString().substring(
+                                    fullPath.toString().indexOf(rootPath.toString()) + rootPath.toString().length() + 1)
+                                    .replace("\\", "/");
+//                    assetsMap.remove(fullPath.toString());
+                            assetsMap.remove(substring);
                         }
                     }
-                } else {
-                    String substring = fullPath.toString().substring(
-                            fullPath.toString().indexOf(rootPath.toString()) + rootPath.toString().length() + 1)
-                            .replace("\\", "/");
-//                    assetsMap.remove(fullPath);
-                    assetsMap.remove(substring);
                 }
-            } else if (changedKind == ENTRY_MODIFY) {
-                if (!file.isDirectory()) {
-                    String substring = fullPath.toString().substring(
-                            fullPath.toString().indexOf(rootPath.toString()) + rootPath.toString().length() + 1)
-                            .replace("\\", "/");
-//                    assetsMap.remove(fullPath.toString());
-                    assetsMap.remove(substring);
-                }
+                watchKey.reset();
             }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
     }
 
