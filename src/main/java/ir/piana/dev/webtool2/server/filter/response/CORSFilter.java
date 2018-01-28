@@ -42,16 +42,19 @@ public class CORSFilter
                 serverCORS.allowOrigin());
         String allowHeaders = "";
         for (String allowHeader : serverCORS.allowHeaders())
-            allowHeaders = allowHeaders.concat(allowHeader).concat(";");
+            allowHeaders = allowHeaders.concat(allowHeader).concat(",");
         response.getHeaders().addAll(
                 "Access-Control-Allow-Headers",
                 allowHeaders);
         response.getHeaders().add(
                 "Access-Control-Allow-Credentials",
                 serverCORS.allowCredentials());
+        response.getHeaders().add(
+                "Allow",
+                "HEAD, POST, GET, OPTIONS, PUT");
         String allowMethods = "";
         for (String allowMethod : serverCORS.allowMethods())
-            allowMethods = allowMethods.concat(allowMethod).concat(";");
+            allowMethods = allowMethods.concat(allowMethod).concat(",");
         response.getHeaders().addAll(
                 "Access-Control-Allow-Methods",
                 allowMethods);
