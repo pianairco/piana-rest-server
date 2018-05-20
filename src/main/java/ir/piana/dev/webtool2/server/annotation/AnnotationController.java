@@ -10,10 +10,7 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by ASUS on 7/28/2017.
@@ -155,6 +152,15 @@ public abstract class AnnotationController {
         Annotation annotation = targetClass
                 .getAnnotation(PianaWebSocket.class);
         return annotation == null ? null : (PianaWebSocket) annotation;
+    }
+
+    public static Set<Class<?>> getFilterClasses() {
+        Reflections reflections = new Reflections();
+        Set<Class<?>> typesAnnotatedWith = reflections
+                .getTypesAnnotatedWith(PianaFilter.class);
+        if(typesAnnotatedWith != null)
+            return typesAnnotatedWith;
+        return new HashSet<>();
     }
 
     public static List<Class> getHandlerClasses() {

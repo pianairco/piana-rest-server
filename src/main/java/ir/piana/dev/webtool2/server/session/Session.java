@@ -11,7 +11,8 @@ import java.util.*;
 /**
  * @author Mohammad Rahmati, 4/18/2017 4:30 PM
  */
-public class Session {
+public class  Session<T> {
+    private T existance;
     private boolean wrongdoer;
     private String sessionName;
     private KeyPair keyPair;
@@ -120,5 +121,13 @@ public class Session {
 
     public void setWebSocketHandler(PianaWebSocketHandler webSocketHandler) {
         this.webSocketHandler = webSocketHandler;
+    }
+
+    public T getExistance() {
+        return existance;
+    }
+
+    public void setExistance(T existance) {
+        this.existance = existance;
     }
 }

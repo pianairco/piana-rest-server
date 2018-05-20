@@ -1,5 +1,6 @@
 package ir.piana.dev.webtool2.server.http;
 
+import ir.piana.dev.webtool2.server.annotation.AnnotationController;
 import ir.piana.dev.webtool2.server.annotation.PianaServer;
 import ir.piana.dev.webtool2.server.filter.response.CORSFilter;
 import ir.piana.dev.webtool2.server.route.RouteClassGenerator;
@@ -78,6 +79,8 @@ public abstract class BaseHttpServer {
 
         resourceConfig.register(JacksonFeature.class);
         resourceConfig.register(CORSFilter.class);
+
+        resourceConfig.registerClasses(AnnotationController.getFilterClasses());
 
         sessionManager = SessionManager
                 .getSessionManager(pianaServer.serverSession());

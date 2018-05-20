@@ -13,7 +13,7 @@ import java.io.IOException;
 
 @Singleton
 public class PianaRequestFilter
-        implements ContainerRequestFilter{
+        implements ContainerRequestFilter {
     @Context
     private Configuration config;
 
