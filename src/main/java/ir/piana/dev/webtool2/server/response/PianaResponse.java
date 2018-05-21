@@ -10,6 +10,7 @@ import java.util.*;
  */
 public class PianaResponse {
     public static final int DEFAULT_STATUS = -1;
+    public static final String DEFAULT_CHARSET = "UTF-8";
 
     private Status responseStatus;
     private int status;
@@ -23,14 +24,14 @@ public class PianaResponse {
                 DEFAULT_STATUS,
                 null,
                 MediaType.APPLICATION_JSON,
-                Charset.forName("ASCII"));
+                Charset.forName(DEFAULT_CHARSET));
     }
 
     public PianaResponse(Status responseStatus,
                          Object entity) {
         this(responseStatus, DEFAULT_STATUS, entity,
                 MediaType.APPLICATION_JSON,
-                Charset.forName("ASCII"));
+                Charset.forName(DEFAULT_CHARSET));
     }
 
     public PianaResponse(Status responseStatus,
@@ -38,7 +39,7 @@ public class PianaResponse {
                          Object entity) {
         this(responseStatus, status, entity,
                 MediaType.APPLICATION_JSON,
-                Charset.forName("ASCII"));
+                Charset.forName(DEFAULT_CHARSET));
     }
 
     public PianaResponse(Status responseStatus,
@@ -48,7 +49,7 @@ public class PianaResponse {
                 DEFAULT_STATUS,
                 entity,
                 mediaType,
-                Charset.forName("ASCII"));
+                Charset.forName(DEFAULT_CHARSET));
     }
 
     public PianaResponse(Status responseStatus,
@@ -59,7 +60,7 @@ public class PianaResponse {
                 status,
                 entity,
                 mediaType,
-                Charset.forName("ASCII"));
+                Charset.forName(DEFAULT_CHARSET));
     }
 
     public PianaResponse(Status responseStatus,
